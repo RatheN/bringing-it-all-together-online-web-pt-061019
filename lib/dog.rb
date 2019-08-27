@@ -37,9 +37,9 @@ class Dog
   end
 
   def self.create(name:, breed:)
-    dog = Dog.new(name: name, breed: breed)
-    dog.save
-    dog
+    new_dog = Dog.new(name: name, breed: breed)
+    new_dog.save
+    new_dog
   end
 
   def self.new_from_db(row)
@@ -72,9 +72,21 @@ class Dog
     dog
   end
 
+  def self.find_by_name(name)
+    sql = <<-SQL
+      SELECT * FROM dogs WHERE name = ? LIMIT 1
+    SQL
 
+    DB[:conn].execute(sql, name).map do |r|
+      self.new_from_db(r)
+    end.first
+  end
 
+  def update
+    sql = <<-SQL
+      UPDATE dogs SET name = ?, breed = ? WHERE id = ?
+    SQL
 
-
-
+    DB[:conn].execute(sql, self.name, self.breed, self.id)
+  end
 end
