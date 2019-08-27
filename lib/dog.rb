@@ -13,7 +13,7 @@ class Dog
         breed TEXT
         )
     SQL
-    
+
     DB[:conn].execute(sql)
   end
 
@@ -47,8 +47,8 @@ class Dog
   end
 
   def self.find_by_id(id)
-    sql = <<-SQL 
-      SELECT * FROM dogs WHERE id = ? LIMIT 1 
+    sql = <<-SQL
+      SELECT * FROM dogs WHERE id = ? LIMIT 1
     SQL
 
     DB[:conn].execute(sql, id).map do |r|
@@ -60,9 +60,9 @@ class Dog
     sql = <<-SQL
       SELECT * FROM dogs WHERE name = ? AND breed = ? LIMIT 1
     SQL
-  
+
     dog = DB[:conn].execute(sql,name,breed)
-  
+
     if !dog.empty?
       dog_info = dog[0]
       dog = Dog.new(id: dog_info[0], name: dog_info[1], breed: dog_info[2])
